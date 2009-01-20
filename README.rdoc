@@ -1,3 +1,7 @@
+== Install
+
+	gem install tamoyal-contacts --source http://gems.github.com
+
 == Basic usage instructions
 
 Fetch users' contact lists from your web application without asking them to
