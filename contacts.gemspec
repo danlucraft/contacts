@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{contacts}
-  s.version = "0.2.5"
+  s.version = "0.2.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tony Amoyal"]
@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs}
   s.email = %q{corgan1003@gmail.com}
   s.extra_rdoc_files = ["lib/config/contacts.yml", "lib/contacts/flickr.rb", "lib/contacts/google.rb", "lib/contacts/version.rb", "lib/contacts/windows_live.rb", "lib/contacts/yahoo.rb", "lib/contacts.rb", "README.rdoc"]
-  s.files = ["lib/config/contacts.yml", "lib/contacts/flickr.rb", "lib/contacts/google.rb", "lib/contacts/version.rb", "lib/contacts/windows_live.rb", "lib/contacts/yahoo.rb", "lib/contacts.rb", "MIT-LICENSE", "Rakefile", "README.rdoc", "spec/contact_spec.rb", "spec/feeds/contacts.yml", "spec/feeds/flickr/auth.getFrob.xml", "spec/feeds/flickr/auth.getToken.xml", "spec/feeds/google-many.xml", "spec/feeds/google-single.xml", "spec/feeds/wl_contacts.xml", "spec/feeds/yh_contacts.txt", "spec/feeds/yh_credential.xml", "spec/flickr/auth_spec.rb", "spec/gmail/auth_spec.rb", "spec/gmail/fetching_spec.rb", "spec/rcov.opts", "spec/spec.opts", "spec/spec_helper.rb", "spec/windows_live/windows_live_spec.rb", "spec/yahoo/yahoo_spec.rb", "vendor/windowslivelogin.rb", "Manifest", "contacts.gemspec"]
+  s.files = ["contacts.gemspec", "lib/config/contacts.yml", "lib/contacts/flickr.rb", "lib/contacts/google.rb", "lib/contacts/version.rb", "lib/contacts/windows_live.rb", "lib/contacts/yahoo.rb", "lib/contacts.rb", "Manifest", "MIT-LICENSE", "Rakefile", "README.rdoc", "spec/contact_spec.rb", "spec/feeds/contacts.yml", "spec/feeds/flickr/auth.getFrob.xml", "spec/feeds/flickr/auth.getToken.xml", "spec/feeds/google-many.xml", "spec/feeds/google-single.xml", "spec/feeds/wl_contacts.xml", "spec/feeds/yh_contacts.txt", "spec/feeds/yh_credential.xml", "spec/flickr/auth_spec.rb", "spec/gmail/auth_spec.rb", "spec/gmail/fetching_spec.rb", "spec/rcov.opts", "spec/spec.opts", "spec/spec_helper.rb", "spec/windows_live/windows_live_spec.rb", "spec/yahoo/yahoo_spec.rb", "vendor/windowslivelogin.rb"]
   s.has_rdoc = true
   s.homepage = %q{git://github.com/corgan1003/contacts.git}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Contacts", "--main", "README.rdoc"]

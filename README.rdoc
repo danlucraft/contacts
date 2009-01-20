@@ -1,6 +1,6 @@
 == Install
 
-	gem install tamoyal-contacts --source http://gems.github.com
+	gem install contacts --source http://gems.github.com
 
 == Basic usage instructions
 
