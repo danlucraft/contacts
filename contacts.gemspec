@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["lib/config/contacts.yml", "lib/contacts/flickr.rb", "lib/contacts/google.rb", "lib/contacts/version.rb", "lib/contacts/windows_live.rb", "lib/contacts/yahoo.rb", "lib/contacts.rb", "README.rdoc"]
   s.files = ["contacts.gemspec", "lib/config/contacts.yml", "lib/contacts/flickr.rb", "lib/contacts/google.rb", "lib/contacts/version.rb", "lib/contacts/windows_live.rb", "lib/contacts/yahoo.rb", "lib/contacts.rb", "Manifest", "MIT-LICENSE", "Rakefile", "README.rdoc", "spec/contact_spec.rb", "spec/feeds/contacts.yml", "spec/feeds/flickr/auth.getFrob.xml", "spec/feeds/flickr/auth.getToken.xml", "spec/feeds/google-many.xml", "spec/feeds/google-single.xml", "spec/feeds/wl_contacts.xml", "spec/feeds/yh_contacts.txt", "spec/feeds/yh_credential.xml", "spec/flickr/auth_spec.rb", "spec/gmail/auth_spec.rb", "spec/gmail/fetching_spec.rb", "spec/rcov.opts", "spec/spec.opts", "spec/spec_helper.rb", "spec/windows_live/windows_live_spec.rb", "spec/yahoo/yahoo_spec.rb", "vendor/windowslivelogin.rb"]
   s.has_rdoc = true
-  s.homepage = %q{git://github.com/corgan1003/contacts.git}
+  s.homepage = %q{git://github.com/tamoyal/contacts.git}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Contacts", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{contacts}
