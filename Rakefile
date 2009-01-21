@@ -2,7 +2,7 @@ require 'spec/rake/spectask'
 require 'rake/rdoctask'
 require 'echoe'
 
-Echoe.new('contacts', '0.2.7') do |p|
+Echoe.new('contacts', '0.2.8') do |p|
   p.description     = "Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs"
   p.url             = "git://github.com/tamoyal/contacts.git"
   p.author          = "Mislav Marohnić"
