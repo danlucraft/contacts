@@ -21,6 +21,14 @@ module GoogleOAuth
              :authorize_path => "/accounts/OAuthAuthorizeToken"})
     end
     
+    def marshal_load(data)
+      initialize(data[:key], data[:secret])
+    end
+    
+    def marshal_dump
+      {:key => self.key, :secret => self.secret}
+    end
+    
     def get_request_token(params={})
       params_str = params.map { |k,v| "%s=%s" % [CGI.escape(k.to_s), CGI.escape(v)] }.join("&")
       uri = URI.parse(request_token_url? ? request_token_url : request_token_path)
@@ -43,6 +51,19 @@ module Contacts
       @request_token = @consumer.get_request_token :scope => "https://www.google.com/m8/feeds/"
       @projection = 'thin'
       @user = user_id.to_s
+    end
+    
+    def marshal_load(data)
+      @consumer = data[:consumer]
+      @request_token = data[:request_token]
+      @projection = 'thin'
+      @user = data[:user]
+    end
+    
+    def marshal_dump
+      {:consumer => @consumer,
+       :request_token => @request_token,
+       :user => @user}
     end
     
     # Available parameters:
