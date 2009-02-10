@@ -1,4 +1,5 @@
 require 'oauth'
+require 'contacts/google'
 
 # An extension to the standard OAuth library so we can nicely use Google APIs
 module GoogleOAuth
@@ -53,10 +54,13 @@ module Contacts
     
     def access_token
       return @access_token if @access_token
-      @access_token = @request_token.get_access_token
+      begin
+        @access_token = @request_token.get_access_token
+      rescue Net::HTTPServerException
+      end
     end
     
-    def get(params)
+    def get(params={})
       path = FeedsPath + CGI.escape(@user)
       google_params = translate_parameters(params)
       query = self.class.query_string(google_params)
