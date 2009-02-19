@@ -6,7 +6,7 @@ require 'md5'
 require 'net/https'
 require 'uri'
 require 'yaml'
-require 'json' unless defined? ActiveSupport::JSON
+require 'json'
 
 module Contacts
   # = How I can fetch Yahoo Contacts?
@@ -212,11 +212,7 @@ module Contacts
     #
     def self.parse_contacts(json)
       contacts = []
-      people = if defined? ActiveSupport::JSON
-        ActiveSupport::JSON.decode(json)
-      else
-        JSON.parse(json)
-      end
+      people = JSON.parse(json)
 
       people['contacts'].each do |contact|
         name = nil
