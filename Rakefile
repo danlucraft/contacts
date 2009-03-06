@@ -1,4 +1,4 @@
-require 'spec/rake/spectask'
+#require 'spec/rake/spectask'
 require 'rake/rdoctask'
 require 'echoe'
 
