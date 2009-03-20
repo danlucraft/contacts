@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-
 Gem::Specification.new do |s|
   s.name = %q{contacts}
   s.version = "0.2.12"
