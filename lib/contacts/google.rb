@@ -302,7 +302,7 @@ module Contacts
         for name, value in response
           out.puts "#{name}: #{value}"
         end
-        out.puts "----\n#{response_body response}\n----" unless response.body.empty?
+        out.puts "----\n#{response.body.inspect}\n----" unless response.body.empty?
       end
   end
 end

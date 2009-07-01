@@ -23,9 +23,13 @@ module Contacts
       %!#<Contacts::Contact "#{name}"#{email ? " (#{email})" : ''}>!
     end
   end
+
+  def self.verbose=(verbose)
+    @verbose = verbose
+  end
   
   def self.verbose?
-    'irb' == $0
+    @verbose || 'irb' == $0
   end
   
   class Error < StandardError
