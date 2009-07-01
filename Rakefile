@@ -58,9 +58,9 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "contacts"
-    s.summary = "TODO"
-    s.email = "keavy@minimetre.com"
-    s.homepage = "http://github.com/keavy/contacts"
+    s.summary = "Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs"
+    s.email = "anthonyeden@gmail.com"
+    s.homepage = "http://github.com/aeden/contacts"
     s.description = "TODO"
     s.authors = ["Mislav Marohniƒá", "Lukas Fittl", "Keavy Miller"]
     s.files =  FileList["[A-Z]*", "{lib,spec,vendor}/**/*"] 
