@@ -163,6 +163,19 @@ module Contacts
     def all_contacts(options = {}, chunk_size = 200)
       in_chunks(options, :contacts, chunk_size)
     end
+    
+    def response_body(response)
+      self.class.response_body(response)
+    end
+    
+    def self.response_body(response)
+      unless response['Content-Encoding'] == 'gzip'
+        response.body
+      else
+        gzipped = StringIO.new(response.body)
+        Zlib::GzipReader.new(gzipped).read
+      end
+    end
 
     protected
     
@@ -179,15 +192,6 @@ module Contacts
         returns
       end
       
-      def response_body(response)
-        unless response['Content-Encoding'] == 'gzip'
-          response.body
-        else
-          gzipped = StringIO.new(response.body)
-          Zlib::GzipReader.new(gzipped).read
-        end
-      end
-      
       def parse_contacts(body)
         doc = Hpricot::XML body
         contacts_found = []
@@ -197,18 +201,70 @@ module Contacts
         end
         
         (doc / '/feed/entry').each do |entry|
-          email_nodes = entry / 'gd:email[@address]'
+          title_node = entry.at('/title')
+          email_nodes = entry / 'gd:email'
+          im_nodes = entry / 'gd:im'
+          phone_nodes = entry / 'gd:phoneNumber'
+          address_nodes = entry / 'gd:postalAddress'
           
-          unless email_nodes.empty?
-            title_node = entry.at('/title')
-            name = title_node ? title_node.inner_text : nil
-            contact = Contact.new(nil, name)
-            contact.emails.concat email_nodes.map { |e| e['address'].to_s }
-            contacts_found << contact
+          name = title_node ? title_node.inner_text : nil
+          contact = Contact.new(nil, name)
+          email_nodes.each do |n|
+            contact.emails << {
+              'value' => n['address'].to_s,
+              'type' => (type_map[n['rel']] || 'other').to_s,
+              'primary' => (n['primary'] == 'true').to_s
+            }
           end
+          im_nodes.each do |n|
+            contact.ims << {
+              'value' => n['address'].to_s,
+              'type' => (im_protocols[n['protocol']] || 'unknown').to_s
+            }
+          end
+          phone_nodes.each do |n|
+            contact.phones << {
+              'value' => n.inner_text,
+              'type' => (type_map[n['rel']] || 'other').to_s
+            }
+          end
+          address_nodes.each do |n|
+            contact.addresses << {
+              'formatted' => n.inner_text,
+              'type' => (type_map[n['rel']] || 'other').to_s
+            }
+          end
+          
+          contacts_found << contact
         end
 
         contacts_found
+      end
+      
+      def type_map
+        @type_map ||= {
+          'http://schemas.google.com/g/2005#other' => 'other',      
+          'http://schemas.google.com/g/2005#home' => 'home', 
+          'http://schemas.google.com/g/2005#work' => 'work', 
+          'http://schemas.google.com/g/2005#mobile' => 'mobile', 
+          'http://schemas.google.com/g/2005#pager' => 'pager', 
+          'http://schemas.google.com/g/2005#fax' => 'fax', 
+          'http://schemas.google.com/g/2005#work_fax' => 'fax', 
+          'http://schemas.google.com/g/2005#home_fax' => 'fax'
+        }
+      end
+      
+      def im_protocols
+        @im_protocols ||= {
+          'http://schemas.google.com/g/2005#GOOGLE_TALK' => 'google',   
+          'http://schemas.google.com/g/2005#YAHOO' => 'yahoo', 
+          'http://schemas.google.com/g/2005#SKYPE' => 'skype', 
+          'http://schemas.google.com/g/2005#JABBER' => 'jabber', 
+          'http://schemas.google.com/g/2005#MSN' => 'msn', 
+          'http://schemas.google.com/g/2005#QQ' => 'qq', 
+          'http://schemas.google.com/g/2005#ICQ' => 'icq', 
+          'http://schemas.google.com/g/2005#AIM' => 'aim'
+        }
       end
       
       # Constructs a query string from a Hash object
@@ -302,7 +358,7 @@ module Contacts
         for name, value in response
           out.puts "#{name}: #{value}"
         end
-        out.puts "----\n#{response.body.inspect}\n----" unless response.body.empty?
+        out.puts "----\n#{response_body(response)}\n----" unless response.body.empty?
       end
   end
 end

@@ -21,6 +21,21 @@ describe Contacts::Contact do
       @contact.emails.should == ['max@example.com', 'maxpower@example.com']
     end
     
+    it "should support multiple ims" do
+      @contact.ims << {'value' => 'max', 'type' => 'skype'}
+      @contact.ims.should == [{'value' => 'max', 'type' => 'skype'}]
+    end
+    
+    it "should support multiple phones" do
+      @contact.phones << {'value' => '111 111 1111', 'type' => 'home'}
+      @contact.phones.should == [{'value' => '111 111 1111', 'type' => 'home'}]
+    end
+    
+    it "should support multiple addresses" do
+      @contact.addresses << {'formatted' => '111 SW 1st Street, New York, NY'}
+      @contact.addresses.should == [{'formatted' => '111 SW 1st Street, New York, NY'}]
+    end
+    
     it "should have username" do
       @contact.username.should == 'maxpower'
     end

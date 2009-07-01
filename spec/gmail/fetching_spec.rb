@@ -88,7 +88,7 @@ describe Contacts::Google do
     found.size.should == 1
     contact = found.first
     contact.name.should == 'Fitzgerald'
-    contact.emails.should == ['fubar@gmail.com']
+    contact.emails.should == [{'primary' => 'true', 'type' => 'home',  'value' => 'fubar@gmail.com'}]
   end
 
   it 'parses a complex feed into name/email pairs' do
@@ -96,13 +96,15 @@ describe Contacts::Google do
     @gmail.expects(:response_body).returns(sample_xml('google-many'))
 
     found = @gmail.contacts
-    found.size.should == 3
+    found.size.should == 4
     found[0].name.should == 'Elizabeth Bennet'
-    found[0].emails.should == ['liz@gmail.com', 'liz@example.org']
-    found[1].name.should == 'William Paginate'
-    found[1].emails.should == ['will_paginate@googlegroups.com']
-    found[2].name.should be_nil
-    found[2].emails.should == ['anonymous@example.com']
+    found[0].emails.should == [{'primary' => 'true', 'type' => 'work', 'value' => 'liz@gmail.com'}, {'primary' => 'false', 'type' => 'home', 'value' => 'liz@example.org'}]
+    found[1].name.should == 'Poor Jack'
+    found[1].emails.should == []
+    found[2].name.should == 'William Paginate'
+    found[2].emails.should == [{'primary' => 'false', 'type' => 'other', 'value' => 'will_paginate@googlegroups.com'}]
+    found[3].name.should be_nil
+    found[3].emails.should == [{'primary' => 'false', 'type' => 'other', 'value' => 'anonymous@example.com'}]
   end
 
   it 'makes modification time available after parsing' do
