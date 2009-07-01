@@ -15,6 +15,11 @@ describe Contacts::Contact do
       @contact.name.should == 'Max Power'
     end
     
+    it "should support a service id" do
+      @contact.service_id = 'service identifier'
+      @contact.service_id.should == 'service identifier'
+    end
+    
     it "should support multiple emails" do
       @contact.emails << 'maxpower@example.com'
       @contact.email.should == 'max@example.com'

@@ -202,13 +202,17 @@ module Contacts
         
         (doc / '/feed/entry').each do |entry|
           title_node = entry.at('/title')
+          id_node = entry.at('/id')
           email_nodes = entry / 'gd:email'
           im_nodes = entry / 'gd:im'
           phone_nodes = entry / 'gd:phoneNumber'
           address_nodes = entry / 'gd:postalAddress'
           
+          service_id = id_node ? id_node.inner_text : nil
           name = title_node ? title_node.inner_text : nil
+          
           contact = Contact.new(nil, name)
+          contact.service_id = service_id
           email_nodes.each do |n|
             contact.emails << {
               'value' => n['address'].to_s,
