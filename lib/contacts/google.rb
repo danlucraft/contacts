@@ -207,6 +207,8 @@ module Contacts
           im_nodes = entry / 'gd:im'
           phone_nodes = entry / 'gd:phoneNumber'
           address_nodes = entry / 'gd:postalAddress'
+          organization_nodes = entry / 'gd:organization'
+          content_node = entry / 'atom:content'
           
           service_id = id_node ? id_node.inner_text : nil
           name = title_node ? title_node.inner_text : nil
@@ -238,6 +240,23 @@ module Contacts
               'type' => (type_map[n['rel']] || 'other').to_s
             }
           end
+          organization_nodes.each do |n|
+            if n['rel'] == 'http://schemas.google.com/g/2005#work'
+              org_name = n / 'gd:orgName'
+              org_title = n / 'gd:orgTitle'
+              org_department = n / 'gd:orgDepartment'
+              org_description = n / 'gd:orgJobDescription'
+              
+              contact.organizations << {
+                'type' => 'job',
+                'name' => org_name ? org_name.inner_text : '',
+                'title' => org_title ? org_title.inner_text : '',
+                'department' => org_department ? org_department.inner_text : '',
+                'description' => org_description ? org_description.inner_text : ''
+              }
+            end
+          end
+          contact.note = content_node ? content_node.inner_text : ''
           
           contacts_found << contact
         end
