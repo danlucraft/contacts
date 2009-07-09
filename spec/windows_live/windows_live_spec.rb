@@ -13,6 +13,8 @@ describe Contacts::WindowsLive do
     
     contacts[0].name.should be_nil
     contacts[0].email.should == 'froz@gmail.com'
+    contacts[1].firstname.should == "Rafael"
+    contacts[1].lastname.should == "Timbo"
     contacts[1].name.should == 'Rafael Timbo'
     contacts[1].email.should == 'timbo@hotmail.com'
     contacts[2].name.should be_nil

@@ -4,7 +4,7 @@ require 'contacts'
 describe Contacts::Contact do
   describe 'instance' do
     before do
-      @contact = Contacts::Contact.new('max@example.com', 'Max Power', 'maxpower')
+      @contact = Contacts::Contact.new('max@example.com', 'Max Power', 'maxpower', "Max", "Power")
     end
     
     it "should have email" do
@@ -43,6 +43,14 @@ describe Contacts::Contact do
     
     it "should have username" do
       @contact.username.should == 'maxpower'
+    end
+    
+    it "should have firstname" do
+      @contact.firstname.should == 'Max'
+    end
+    
+    it "should have lastname" do
+      @contact.lastname.should == 'Power'
     end
   end
   

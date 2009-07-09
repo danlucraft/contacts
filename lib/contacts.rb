@@ -6,10 +6,10 @@ module Contacts
   
   # An object that represents a single contact
   class Contact
-    attr_reader :emails, :ims, :phones, :addresses, :organizations
+    attr_reader :emails, :ims, :phones, :addresses, :organizations, :firstname, :lastname
     attr_accessor :name, :username, :service_id, :note
     
-    def initialize(email, name = nil, username = nil)
+    def initialize(email, name = nil, username = nil, firstname = nil, lastname = nil)
       @emails = []
       @emails << email if email
       @ims = []
@@ -18,6 +18,8 @@ module Contacts
       @organizations = []
       @name = name
       @username = username
+      @firstname = firstname
+      @lastname = lastname
     end
     
     def email
