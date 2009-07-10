@@ -153,7 +153,7 @@ module Contacts
           name = "#{first_name} #{last_name}"
           name.strip!
         end
-        new_contact = Contact.new(email, name)
+        new_contact = Contact.new(email, name, nil, first_name, last_name)
         contacts << new_contact
       end
 
