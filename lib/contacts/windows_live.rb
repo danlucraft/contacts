@@ -50,7 +50,7 @@ module Contacts
   #
   class WindowsLive
     CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
-
+    attr_accessor :wll
     # Initialize a new WindowsLive object.
     #    
     # ==== Paramaters
@@ -90,6 +90,10 @@ module Contacts
       @consent_token = @wll.processConsent(consent)
     end
     
+    def process_consent_token(consent_token)
+      @wll.processConsentToken consent_token
+    end
+        
     # This method return the user's contacts inside an Array in the following
     # format:
     #
@@ -104,7 +108,11 @@ module Contacts
     # the redirection POST from Windows Live
     #
     def contacts(consent)
-      process_consent(consent)
+      if consent.is_a? WindowsLiveLogin::ConsentToken
+        @consent_token = consent
+      else
+        process_consent(consent)
+      end
       contacts_xml = access_live_contacts_api()
       contacts_list = WindowsLive.parse_xml(contacts_xml)
     end
