@@ -46,6 +46,7 @@ module Contacts
     AuthSubPath = '/accounts/AuthSub' # all variants go over HTTPS
     ClientLogin = '/accounts/ClientLogin'
     FeedsPath   = '/m8/feeds/contacts/'
+    GroupsPath  = '/m8/feeds/groups/'
     
     # default options for #authentication_url
     def self.authentication_url_options
@@ -119,17 +120,30 @@ module Contacts
       @token   = token.to_s
       @headers = {
         'Accept-Encoding' => 'gzip',
-        'User-Agent' => Identifier + ' (gzip)'
+        'User-Agent' => Identifier + ' (gzip)',
+        'GData-Version' => '3.0'
       }.update(self.class.authorization_header(@token, client))
       @projection = 'thin'
     end
 
-    def get(params) # :nodoc:
+    def get(params={}) # :nodoc:
       self.class.http_start(false) do |google|
         path = FeedsPath + CGI.escape(@user)
         google_params = translate_parameters(params)
         query = self.class.query_string(google_params)
+        #puts "get query: #{query}"
         google.get("#{path}/#{@projection}?#{query}", @headers)
+      end
+    end
+    
+    def get_groups(params={})
+      self.class.http_start(false) do |google|
+        path = GroupsPath + CGI.escape(@user)
+        google_params = translate_parameters(params)
+        query = self.class.query_string(google_params)
+        url = "#{path}/full?#{query}"
+        #puts "get_groups url: #{url}"
+        google.get(url, @headers)
       end
     end
 
@@ -164,6 +178,12 @@ module Contacts
       in_chunks(options, :contacts, chunk_size)
     end
     
+    def groups(options = {})
+      params = {}.update(options)
+      response = get_groups(params)
+      parse_groups response_body(response)
+    end
+    
     def response_body(response)
       self.class.response_body(response)
     end
@@ -190,6 +210,24 @@ module Contacts
         end while chunk.size == chunk_size 
         
         returns
+      end
+      
+      def parse_groups(body)
+        doc = Hpricot::XML body
+        groups_found = {}
+        
+        (doc / '/feed/entry').each do |entry|
+          id_node = entry.at('id')
+          title_node = entry.at('/title')
+          
+          entry_id = id_node.inner_text
+          title = title_node ? title_node.inner_text : ''
+          
+          puts "#{title}: #{entry_id}"
+          groups_found[title] = entry_id
+        end
+        
+        groups_found
       end
       
       def parse_contacts(body)
@@ -326,6 +364,9 @@ module Contacts
               when :updated_after
                 value = value.strftime("%Y-%m-%dT%H:%M:%S%Z") if value.respond_to? :strftime
                 'updated-min'
+              when :group_name
+                value = groups[value]
+                'group'
               else key
               end
             
