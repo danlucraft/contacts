@@ -249,7 +249,7 @@ module Contacts
           content_node = entry / 'atom:content'
           
           service_id = id_node ? id_node.inner_text : nil
-          name = title_node ? title_node.inner_text : nil
+          name = title_node ? title_node.inner_html : nil
           
           contact = Contact.new(nil, name)
           contact.service_id = service_id
@@ -268,13 +268,13 @@ module Contacts
           end
           phone_nodes.each do |n|
             contact.phones << {
-              'value' => n.inner_text,
+              'value' => n.inner_html,
               'type' => (type_map[n['rel']] || 'other').to_s
             }
           end
           address_nodes.each do |n|
             contact.addresses << {
-              'formatted' => n.inner_text,
+              'formatted' => n.inner_html,
               'type' => (type_map[n['rel']] || 'other').to_s
             }
           end
@@ -287,14 +287,14 @@ module Contacts
               
               contact.organizations << {
                 'type' => 'job',
-                'name' => org_name ? org_name.inner_text : '',
-                'title' => org_title ? org_title.inner_text : '',
-                'department' => org_department ? org_department.inner_text : '',
-                'description' => org_description ? org_description.inner_text : ''
+                'name' => org_name ? org_name.inner_html : '',
+                'title' => org_title ? org_title.inner_html : '',
+                'department' => org_department ? org_department.inner_html : '',
+                'description' => org_description ? org_description.inner_html : ''
               }
             end
           end
-          contact.note = content_node ? content_node.inner_text : ''
+          contact.note = content_node ? content_node.inner_html : ''
           
           contacts_found << contact
         end
