@@ -105,9 +105,13 @@ module Contacts
     # * path <String>:: The path of the redirect request that Yahoo sent to you
     # after authenticating the user
     #
-    def contacts(path)
+    def contacts(token)
       begin
-        validate_signature(path)
+        if token.is_a?(YahooToken)
+          @token = token.token
+        else
+          validate_signature(token)
+        end
         credentials = access_user_credentials()
         parse_credentials(credentials)
         contacts_json = access_address_book_api()
@@ -213,10 +217,11 @@ module Contacts
     def self.parse_contacts(json)
       contacts = []
       people = JSON.parse(json)
-
       people['contacts'].each do |contact|
         name = nil
         email = nil
+        firstname = nil
+        lastname = nil
         contact['fields'].each do |field|
           case field['type']
           when 'email'
@@ -225,12 +230,20 @@ module Contacts
           when 'name'
             name = "#{field['first']} #{field['last']}"
             name.strip!
+            lastname = field['last']
+            firstname = field['first']
           end
         end
-        contacts.push Contact.new(email, name)
+        contacts.push Contact.new(email, name, nil, firstname, lastname)
       end
       return contacts
     end
 
+  end
+  class YahooToken
+    attr_reader :token
+    def initialize(token)
+      @token = token
+    end
   end
 end
