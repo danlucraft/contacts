@@ -234,7 +234,10 @@ module Contacts
             firstname = field['first']
           end
         end
-        contacts.push Contact.new(email, name, nil, firstname, lastname)
+        yahoo_contact = Contact.new(email, name, nil, firstname, lastname)
+        yahoo_contact.service_id = contact['cid']
+
+        contacts.push yahoo_contact
       end
       return contacts
     end
