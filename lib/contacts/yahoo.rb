@@ -58,7 +58,7 @@ module Contacts
     AUTH_PATH = "/WSLogin/V1/wslogin?appid=#appid&ts=#ts"
     CREDENTIAL_PATH = "/WSLogin/V1/wspwtoken_login?appid=#appid&ts=#ts&token=#token"
     ADDRESS_BOOK_DOMAIN = "address.yahooapis.com"
-    ADDRESS_BOOK_PATH = "/v1/searchContacts?format=json&fields=name,email&appid=#appid&WSSID=#wssid"
+    ADDRESS_BOOK_PATH = "/v1/searchContacts?format=json&fields=all&appid=#appid&WSSID=#wssid"
     CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
 
     attr_reader :appid, :secret, :token, :wssid, :cookie
@@ -213,7 +213,24 @@ module Contacts
     #
     # ==== Parameters
     # * json <String>:: A String of user's contacts in JSON format
-    #
+    # "fields": [
+    #    {
+    #        "type": "phone",
+    #        "data": "808 123 1234",
+    #        "home": true,
+    #    },
+    #    {
+    #        "type": "email",
+    #        "data": "martin.berner@mail.com",
+    #    },
+    #    
+    #    {
+    #        "type": "otherid",
+    #        "data": "windowslive@msn.com",
+    #        "msn":  true,
+    #    }
+    #  ]
+    #  
     def self.parse_contacts(json)
       contacts = []
       people = JSON.parse(json)
@@ -222,24 +239,76 @@ module Contacts
         email = nil
         firstname = nil
         lastname = nil
-        contact['fields'].each do |field|
-          case field['type']
-          when 'email'
-            email = field['data']
-            email.strip!
-          when 'name'
-            name = "#{field['first']} #{field['last']}"
-            name.strip!
-            lastname = field['last']
-            firstname = field['first']
-          end
+        
+        contact_fields=Yahoo.array_to_hash contact['fields']
+
+        emails = contact_fields['email'].collect {|e| e['data']}
+        ims = (contact_fields['otherid'] || []).collect { |im| get_type_value(im) }
+        phones = (contact_fields['phone'] || []).collect { |phone| get_type_value(phone) }
+        addresses = (contact_fields['address'] || []).collect do |address| 
+          type=get_type(address)
+          value=[address['street'], address['city'], address['state'], address['zip'], address['country']].compact.join(", ")
+          {"type" => type, "value" => value}
         end
-        yahoo_contact = Contact.new(email, name, nil, firstname, lastname)
+        name_field=contact_fields['name']
+        unless (name_field.empty?)
+          name_field = name_field[0]
+          name = "#{name_field['first']} #{name_field['last']}"
+          name.strip!
+          lastname = name_field['last']
+          firstname = name_field['first']
+        end
+        yahoo_contact = Contact.new(nil, name, nil, firstname, lastname)
+        yahoo_contact.emails = emails
+        yahoo_contact.ims = ims
+        yahoo_contact.phones = phones
+        yahoo_contact.addresses = addresses
         yahoo_contact.service_id = contact['cid']
 
         contacts.push yahoo_contact
       end
       return contacts
+    end
+    
+    #
+    # grab the type field from each array item 
+    #   and turn it into a "email"=>{}, "phone"=>{} array
+    #
+    #
+    private 
+    def self.array_to_hash(a)
+      a.inject({}) {|x,y|
+        x[y['type']] ||= []
+        x[y['type']] << y
+        x
+      }
+    end
+
+    #
+    # return type/value from a datastructure like
+    # {
+    #   "data": "808 456 7890",
+    #   "mobile": true
+    # }
+    # -----> "type"=>"mobile", "value"=>"808 456 7890"
+    #
+    def self.get_type_value(hash)
+      type_field = hash.find{ |x| x[1] == true }
+      type = type_field  ? type_field[0] : nil
+      {"type" => type, "value" => hash["data"]}
+    end
+    
+    #
+    # return type from a datastructure like
+    # {
+    #   "data": "808 456 7890",
+    #   "mobile": true
+    # }
+    # -----> "mobile"
+    #
+    def self.get_type(hash)
+      type_field = hash.find{ |x| x[1] == true }
+      type = type_field  ? type_field[0] : nil
     end
 
   end

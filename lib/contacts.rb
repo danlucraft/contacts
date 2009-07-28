@@ -6,8 +6,8 @@ module Contacts
   
   # An object that represents a single contact
   class Contact
-    attr_reader :emails, :ims, :phones, :addresses, :organizations, :firstname, :lastname
-    attr_accessor :name, :username, :service_id, :note
+    attr_reader   :organizations, :firstname, :lastname
+    attr_accessor :name, :username, :service_id, :note, :emails, :ims,:phones, :addresses
     
     def initialize(email, name = nil, username = nil, firstname = nil, lastname = nil)
       @emails = []

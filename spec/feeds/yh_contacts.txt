@@ -34,6 +34,13 @@
                "categories":[
                ]
             },
+	   {
+               "type":"email",
+               "data":"nina2@yahoo.com",
+               "fid":5,
+               "categories":[
+               ]
+            },
             {
                "type":"name",
                "first":"Nina",
@@ -41,77 +48,28 @@
                "fid":4,
                "categories":[
                ]
-            }
+            },
+	    {
+	      "type": "otherid",
+	      "data": "windowslive@msn.com",
+	      "msn": true
+	    },
+	    {
+	      "type": "phone",
+	      "data": "808 456 7890",
+	      "mobile": true 
+	    },
+	    {
+	      "type": "address",
+	      "street": "123 Home Street",
+	      "city": "Super City",
+	      "state": "HI",
+	      "zip": "96815",
+	      "country": "United States",
+	      "home": true
+	    }
          ],
          "cid":5,
-         "categories":[
-         ]
-      },
-      {
-         "type":"contact",
-         "fields":[
-            {
-               "type":"email",
-               "data":"and@yahoo.com",
-               "fid":7,
-               "categories":[
-               ]
-            },
-            {
-               "type":"name",
-               "first":"Andrea",
-               "last":"Dimitri",
-               "fid":6,
-               "categories":[
-               ]
-            }
-         ],
-         "cid":1,
-         "categories":[
-         ]
-      },
-      {
-         "type":"contact",
-         "fields":[
-            {
-               "type":"email",
-               "data":"ricardo@poli.usp.br",
-               "fid":11,
-               "categories":[
-               ]
-            },
-            {
-               "type":"name",
-               "first":"Ricardo",
-               "last":"Fiorelli",
-               "fid":10,
-               "categories":[
-               ]
-            }
-         ],
-         "cid":3,
-         "categories":[
-         ]
-      },
-      {
-         "type":"contact",
-         "fields":[
-            {
-               "type":"email",
-               "data":"pizinha@yahoo.com.br",
-               "fid":14,
-               "categories":[
-               ]
-            },
-            {
-               "type":"name",
-               "first":"Priscila",
-               "fid":13,
-               "categories":[
-               ]
-            }
-         ],
-         "cid":2,
          "categories":[
          ]
       }

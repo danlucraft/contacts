@@ -20,12 +20,7 @@ describe Contacts::Yahoo do
     redirect_path = '/?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&token=AB.KoEg8vBwvJKFkwfcDTJEMKhGeAD6KhiDe0aZLCvoJzMeQG00-&appdata=&ts=1218501215&sig=d381fba89c7e9d3c14788720733c3fbf'
                             
     results = @yahoo.contacts(redirect_path)
-    results.should have_contact('Hugo Barauna', 'hugo.barauna@gmail.com', 4)
-    results.should have_contact('Nina Benchimol', 'nina@hotmail.com', 5)
-    results.should have_contact('Andrea Dimitri', 'and@yahoo.com',1)
-    results.should have_contact('Ricardo Fiorelli', 'ricardo@poli.usp.br',3)
-    results.should have_contact('Priscila', 'pizinha@yahoo.com.br', 2)
-  end
+    results.size.should == 2  end
 
   it 'should validate yahoo redirect signature' do
     redirect_path = '/?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&token=AB.KoEg8vBwvJKFkwfcDTJEMKhGeAD6KhiDe0aZLCvoJzMeQG00-&appdata=&ts=1218501215&sig=d381fba89c7e9d3c14788720733c3fbf'
@@ -58,10 +53,13 @@ describe Contacts::Yahoo do
     json = read_file('yh_contacts.txt')
     
     Contacts::Yahoo.parse_contacts(json).should have_contact('Hugo Barauna', 'hugo.barauna@gmail.com', 4)
-    Contacts::Yahoo.parse_contacts(json).should have_contact('Nina Benchimol', 'nina@hotmail.com', 5)
-    Contacts::Yahoo.parse_contacts(json).should have_contact('Andrea Dimitri', 'and@yahoo.com', 1)
-    Contacts::Yahoo.parse_contacts(json).should have_contact('Ricardo Fiorelli', 'ricardo@poli.usp.br', 3)
-    Contacts::Yahoo.parse_contacts(json).should have_contact('Priscila', 'pizinha@yahoo.com.br', 2)
+    Contacts::Yahoo.parse_contacts(json).should have_contact('Nina Benchimol', 
+      ['nina@hotmail.com','nina2@yahoo.com'], 
+      5, 
+      [{"type" => "msn", "value" => "windowslive@msn.com"}], 
+      [{"type" => "mobile", "value" => "808 456 7890"}],
+      [{"type" => "home", "value" => "123 Home Street, Super City, HI, 96815, United States"}]
+    )
   end
 
   it 'should can be initialized by a YAML file' do
@@ -73,10 +71,19 @@ describe Contacts::Yahoo do
     File.open(@path + file, 'r+').read
   end
 
-  def have_contact(name, email, cid)
+  def have_contact(name, email, cid, ims = [], phones = [], addresses = [])
+    email = [email] if email.is_a? String
     matcher_class = Class.new()
     matcher_class.instance_eval do 
-      define_method(:matches?) {|some_contacts| some_contacts.any? {|a_contact| a_contact.name == name && a_contact.emails.include?(email) && a_contact.service_id == cid}}
+      define_method(:matches?) {|some_contacts| some_contacts.any? {|a_contact| 
+          a_contact.name == name && \
+          ((a_contact.emails - email).empty?) && \
+          ((a_contact.ims    - ims).empty?) && \
+          ((a_contact.phones - phones).empty?) && \
+          ((a_contact.addresses - addresses).empty?) && \
+          a_contact.service_id == cid
+        }
+      }
     end
     matcher_class.new
   end
