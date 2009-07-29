@@ -72,6 +72,7 @@
          "cid":5,
          "categories":[
          ]
-      }
+      },
+      {"fields": [{"fid": 9, "data": "carl_larsson", "type": "yahooid", "categories": []}], "type": "contact", "categories": [], "cid": 30}
    ]
 }

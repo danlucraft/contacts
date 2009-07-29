@@ -20,7 +20,7 @@ describe Contacts::Yahoo do
     redirect_path = '/?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&token=AB.KoEg8vBwvJKFkwfcDTJEMKhGeAD6KhiDe0aZLCvoJzMeQG00-&appdata=&ts=1218501215&sig=d381fba89c7e9d3c14788720733c3fbf'
                             
     results = @yahoo.contacts(redirect_path)
-    results.size.should == 2  end
+    results.size.should == 3  end
 
   it 'should validate yahoo redirect signature' do
     redirect_path = '/?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&token=AB.KoEg8vBwvJKFkwfcDTJEMKhGeAD6KhiDe0aZLCvoJzMeQG00-&appdata=&ts=1218501215&sig=d381fba89c7e9d3c14788720733c3fbf'
@@ -60,6 +60,7 @@ describe Contacts::Yahoo do
       [{"type" => "mobile", "value" => "808 456 7890"}],
       [{"type" => "home", "value" => "123 Home Street, Super City, HI, 96815, United States"}]
     )
+    Contacts::Yahoo.parse_contacts(json).should have_contact('carl_larsson','',30) 
   end
 
   it 'should can be initialized by a YAML file' do

@@ -234,6 +234,7 @@ module Contacts
     def self.parse_contacts(json)
       contacts = []
       people = JSON.parse(json)
+
       people['contacts'].each do |contact|
         name = nil
         email = nil
@@ -242,22 +243,33 @@ module Contacts
         
         contact_fields=Yahoo.array_to_hash contact['fields']
 
-        emails = contact_fields['email'].collect {|e| e['data']}
-        ims = (contact_fields['otherid'] || []).collect { |im| get_type_value(im) }
-        phones = (contact_fields['phone'] || []).collect { |phone| get_type_value(phone) }
+        emails    = (contact_fields['email'] || []).collect {|e| e['data']}
+        ims       = (contact_fields['otherid'] || []).collect { |im| get_type_value(im) }
+        phones    = (contact_fields['phone'] || []).collect { |phone| get_type_value(phone) }
         addresses = (contact_fields['address'] || []).collect do |address| 
           type=get_type(address)
-          value=[address['street'], address['city'], address['state'], address['zip'], address['country']].compact.join(", ")
+          type = {"home" => "home", "work" => "work"}[type.downcase] || "other"
+          value = [address['street'], address['city'], address['state'], address['zip'], address['country']].compact.join(", ")
           {"type" => type, "value" => value}
         end
-        name_field=contact_fields['name']
-        unless (name_field.empty?)
+        
+        name_field=(contact_fields['name'] || [])
+        
+        # if name is blank, try go for the yahoo id, and if that's blank too, ignore the record altogether (probably a mailing list)
+        if (name_field.empty?)
+          if contact_fields['yahooid']
+            name = contact_fields['yahooid'][0]['data']
+          else
+            next
+          end
+        else
           name_field = name_field[0]
           name = "#{name_field['first']} #{name_field['last']}"
           name.strip!
           lastname = name_field['last']
           firstname = name_field['first']
         end
+        
         yahoo_contact            = Contact.new(nil, name, nil, firstname, lastname)
         yahoo_contact.emails     = emails
         yahoo_contact.ims        = ims
@@ -274,10 +286,9 @@ module Contacts
     # grab the type field from each array item 
     #   and turn it into a "email"=>{}, "phone"=>{} array
     #
-    #
     private 
     def self.array_to_hash(a)
-      a.inject({}) {|x,y|
+      (a || []).inject({}) {|x,y|
         x[y['type']] ||= []
         x[y['type']] << y
         x
@@ -299,7 +310,7 @@ module Contacts
     end
     
     #
-    # return type from a datastructure like
+    # return just the type from a datastructure like
     # {
     #   "data": "808 456 7890",
     #   "mobile": true
