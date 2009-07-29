@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<LiveContacts>
+
+	<Contacts>
+		<Contact>
+			<ID>abc</ID>
+			<WindowsLiveID>beenthere@hotmail.com</WindowsLiveID>
+
+			<Profiles>
+				<Personal>
+					<FirstName>Mia</FirstName>
+					<LastName>Pia</LastName>
+					<UniqueName>mia</UniqueName>
+				</Personal>
+			</Profiles>
+			<Emails>
+				<Email>
+					<ID>1</ID>
+					<EmailType>Personal</EmailType>
+					<Address>mia@hotmail.com</Address>
+					<IsIMEnabled>false</IsIMEnabled>
+					<IsDefault>false</IsDefault>
+				</Email>
+				<Email>
+					<ID>8</ID>
+					<EmailType>WindowsLiveID</EmailType>
+					<Address>othermia@yahoo.com</Address>
+					<IsIMEnabled>true</IsIMEnabled>
+					<IsDefault>false</IsDefault>
+				</Email>
+			</Emails>
+			<Phones>
+				<Phone>
+					<ID>1</ID>
+					<PhoneType>Personal</PhoneType>
+					<Number>(123) 123 1234</Number>
+					<IsIMEnabled>false</IsIMEnabled>
+					<IsDefault>false</IsDefault>
+				</Phone>
+				<Phone>
+					<ID>3</ID>
+					<PhoneType>Mobile</PhoneType>
+					<Number>(321) 555 1234</Number>
+					<IsIMEnabled>false</IsIMEnabled>
+					<IsDefault>false</IsDefault>
+				</Phone>
+			</Phones>
+			<Locations>
+				<Location>
+					<ID>1</ID>
+					<LocationType>Personal</LocationType>
+					<StreetLine>123 Green St</StreetLine>
+					<PrimaryCity>Middleville</PrimaryCity>
+					<Subdivision>CA</Subdivision>
+					<PostalCode>92123</PostalCode>
+					<CountryRegion>USA</CountryRegion>
+					<IsDefault>false</IsDefault>
+				</Location>
+			</Locations>
+		</Contact>
+		<Contact>
+			<ID>def</ID>
+			<WindowsLiveID>marcus@hotmail.com</WindowsLiveID>
+			<Profiles>
+				<Personal>
+					<UniqueName>marcus</UniqueName>
+					<DisplayName>marietta_ru@hotmail.com</DisplayName>
+				</Personal>
+			</Profiles>
+			<Emails>
+				<Email>
+					<EmailType>WindowsLiveID</EmailType>
+					<Address>marcus@hotmail.com</Address>
+				</Email>
+			</Emails>
+		</Contact>
+	</Contacts>
+</LiveContacts>

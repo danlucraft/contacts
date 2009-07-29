@@ -141,31 +141,47 @@ module Contacts
     #
     def self.parse_xml(xml)
       doc = Hpricot::XML(xml)
-
       contacts = []
-      doc.search('/livecontacts/contacts/contact').each do |contact|
-        email = contact.at('/preferredemail').inner_text
-        email.strip!
+      doc.search('/LiveContacts/Contacts/Contact') do |contact|
+         contact_id  = text_value contact, "ID"
+          first_name = text_value contact, "Profiles/Personal/FirstName"
+          last_name  = text_value contact, "Profiles/Personal/LastName"
+          name = "#{first_name} #{last_name}".strip
+          emails     = contact.search('Emails/Email').collect {|e| text_value e, "Address"}
+          phones     = contact.search('Phones/Phone').collect do |e| 
+            type=convert_type(text_value(e, "PhoneType"))
+            { "type" => type, "value" => (text_value e, "Number") }
+          end
 
-        first_name = last_name = nil
-        if first_name = contact.at('/profiles/personal/firstname')
-          first_name = first_name.inner_text.strip
-        end
+          addresses = contact.search('Locations/Location').collect do |e|
+            street       = text_value(e, "StreetLine")
+            postal_code  = text_value(e, "PostalCode")
+            sub_division = text_value(e, "Subdivision")
+            city         = text_value(e, "PrimaryCity")
+            country_code = text_value(e, "CountryRegion")
+            formatted    = [street, city, sub_division, postal_code, country_code].compact.join(", ")
+            type         = convert_type(text_value(e, "LocationType"))
+            { "formatted" => formatted, "type" => type,
+              "streetAddress" => street, "locality" => city, "region" => sub_division, "postalCode" => postal_code, "country" => country_code}
+            end
 
-        if last_name = contact.at('/profiles/personal/lastname')
-          last_name = last_name.inner_text.strip
-        end
-        
-        name = nil
-        if !first_name.nil? || !last_name.nil?
-          name = "#{first_name} #{last_name}"
-          name.strip!
-        end
-        new_contact = Contact.new(email, name, nil, first_name, last_name)
-        contacts << new_contact
-      end
 
+          new_contact = Contact.new(nil, name, nil, first_name, last_name)
+          new_contact.emails    = emails
+          new_contact.phones    = phones
+          new_contact.addresses = addresses
+                contacts << new_contact
+      end  
       return contacts
+      
+    end
+    
+    def self.text_value(elem,path)
+      elem.at(path).inner_text rescue nil
+    end
+    
+    def self.convert_type(t)
+      {"personal" => "home", "business" => "work"}[t.downcase] || "other"
     end
   end
 
