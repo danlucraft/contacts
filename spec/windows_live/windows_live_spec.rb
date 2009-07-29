@@ -11,6 +11,7 @@ describe Contacts::WindowsLive do
   it 'parse the XML contacts document' do
     contacts = Contacts::WindowsLive.parse_xml(contacts_xml)
     contacts.size.should == 2
+    contacts[0].service_id == "abc"
     contacts[0].name.should == "Mia Pia"
     contacts[0].firstname.should == "Mia"
     contacts[0].lastname.should == "Pia"
@@ -18,6 +19,7 @@ describe Contacts::WindowsLive do
     contacts[0].phones.should include({"value"=>"(123) 123 1234", "type"=>"home"}, {"value"=>"(321) 555 1234", "type"=>"other"})
     contacts[0].addresses.should include({"region"=>"CA", "country"=>"USA", "postalCode"=>"92123", "streetAddress"=>"123 Green St", "type"=>"home", "locality"=>"Middleville", "formatted"=>"123 Green St, Middleville, CA, 92123, USA"})
     
+    contacts[0].service_id == "def"
     contacts[1].name.should == ""
     contacts[1].firstname.should == nil
     contacts[1].lastname.should == nil

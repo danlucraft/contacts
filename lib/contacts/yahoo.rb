@@ -258,11 +258,11 @@ module Contacts
           lastname = name_field['last']
           firstname = name_field['first']
         end
-        yahoo_contact = Contact.new(nil, name, nil, firstname, lastname)
-        yahoo_contact.emails = emails
-        yahoo_contact.ims = ims
-        yahoo_contact.phones = phones
-        yahoo_contact.addresses = addresses
+        yahoo_contact            = Contact.new(nil, name, nil, firstname, lastname)
+        yahoo_contact.emails     = emails
+        yahoo_contact.ims        = ims
+        yahoo_contact.phones     = phones
+        yahoo_contact.addresses  = addresses
         yahoo_contact.service_id = contact['cid']
 
         contacts.push yahoo_contact

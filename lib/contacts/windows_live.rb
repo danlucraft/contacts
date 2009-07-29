@@ -126,7 +126,7 @@ module Contacts
 
       response = nil
       http.start do |http|
-         request = Net::HTTP::Get.new("/users/@L@#{@consent_token.locationid}/rest/invitationsbyemail", {"Authorization" => "DelegatedToken dt=\"#{@consent_token.delegationtoken}\""})
+         request = Net::HTTP::Get.new("/users/@L@#{@consent_token.locationid}/rest/LiveContacts", {"Authorization" => "DelegatedToken dt=\"#{@consent_token.delegationtoken}\""})
          response = http.request(request)
       end
 
@@ -143,16 +143,19 @@ module Contacts
       doc = Hpricot::XML(xml)
       contacts = []
       doc.search('/LiveContacts/Contacts/Contact') do |contact|
-         contact_id  = text_value contact, "ID"
+        
+          contact_id = text_value contact, "ID"
+          
           first_name = text_value contact, "Profiles/Personal/FirstName"
           last_name  = text_value contact, "Profiles/Personal/LastName"
           name = "#{first_name} #{last_name}".strip
           emails     = contact.search('Emails/Email').collect {|e| text_value e, "Address"}
+          
           phones     = contact.search('Phones/Phone').collect do |e| 
             type=convert_type(text_value(e, "PhoneType"))
             { "type" => type, "value" => (text_value e, "Number") }
           end
-
+          
           addresses = contact.search('Locations/Location').collect do |e|
             street       = text_value(e, "StreetLine")
             postal_code  = text_value(e, "PostalCode")
@@ -161,19 +164,17 @@ module Contacts
             country_code = text_value(e, "CountryRegion")
             formatted    = [street, city, sub_division, postal_code, country_code].compact.join(", ")
             type         = convert_type(text_value(e, "LocationType"))
-            { "formatted" => formatted, "type" => type,
-              "streetAddress" => street, "locality" => city, "region" => sub_division, "postalCode" => postal_code, "country" => country_code}
-            end
-
+            { "formatted" => formatted, "type" => type, "streetAddress" => street, "locality" => city, "region" => sub_division, "postalCode" => postal_code, "country" => country_code}
+          end
 
           new_contact = Contact.new(nil, name, nil, first_name, last_name)
-          new_contact.emails    = emails
-          new_contact.phones    = phones
-          new_contact.addresses = addresses
-                contacts << new_contact
+          new_contact.emails      = emails
+          new_contact.phones      = phones
+          new_contact.addresses   = addresses
+          new_contact.service_id  = contact_id
+          contacts << new_contact
       end  
       return contacts
-      
     end
     
     def self.text_value(elem,path)
