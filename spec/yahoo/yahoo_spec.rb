@@ -13,6 +13,11 @@ describe Contacts::Yahoo do
     auth_url.should match(/https:\/\/api.login.yahoo.com\/WSLogin\/V1\/wslogin\?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&ts=.*&sig=.*/)
   end
 
+  it 'should generate an athentication URL with appdata' do
+    auth_url = @yahoo.get_authentication_url("foobar")
+    auth_url.should match(/https:\/\/api.login.yahoo.com\/WSLogin\/V1\/wslogin\?appid=i%3DB%26p%3DUw70JGIdHWVRbpqYItcMw--&ts=.*&appdata=foobar&sig=.*/)
+  end
+
   it 'should have a simple interface to grab the contacts' do
     @yahoo.expects(:access_user_credentials).returns(read_file('yh_credential.xml'))
     @yahoo.expects(:access_address_book_api).returns(read_file('yh_contacts.txt'))

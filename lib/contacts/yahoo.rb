@@ -81,12 +81,14 @@ module Contacts
     # generates that URL. The user must access that URL, and after he has done
     # authentication, hi will be redirected to your application.
     #
-    def get_authentication_url
+    def get_authentication_url(appdata= nil)
       path = AUTH_PATH.clone
       path.sub!(/#appid/, @appid)
 
       timestamp = Time.now.utc.to_i
       path.sub!(/#ts/, timestamp.to_s)
+
+      path<< "&appdata=#{appdata}" unless appdata.nil?
       
       signature = MD5.hexdigest(path + @secret)
       return AUTH_DOMAIN + "#{path}&sig=#{signature}"
