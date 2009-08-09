@@ -70,7 +70,7 @@ module Contacts
     # generates that URL. The user must access that URL, and after he has done
     # authentication, hi will be redirected to your application.
     #
-    def get_authentication_url
+    def get_authentication_url(context=nil)
       @wll.getConsentUrl("Contacts.Invite")
     end
     
