@@ -71,7 +71,7 @@ module Contacts
     # authentication, hi will be redirected to your application.
     #
     def get_authentication_url(context=nil)
-      @wll.getConsentUrl("Contacts.Invite", context)
+      @wll.getConsentUrl("Contacts.View", context)
     end
     
     # After the user has been authenticaded, Windows Live Delegated Authencation
