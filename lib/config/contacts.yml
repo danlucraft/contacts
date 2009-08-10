@@ -1,3 +1,7 @@
+flickr_fu:
+  appid: your_api_key
+  secret: your_app_secret
+
 windows_live:
   appid: your_app_id
   secret: your_app_secret_key
