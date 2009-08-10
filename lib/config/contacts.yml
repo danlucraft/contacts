@@ -1,6 +1,6 @@
-flickr_fu:
+flickr:
   appid: your_api_key
-  secret: your_app_secret
+  secret: your_secret
 
 windows_live:
   appid: your_app_id
