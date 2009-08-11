@@ -27,14 +27,15 @@ module Contacts
 
     def contacts(frob= nil)
       @token ||= get_token(frob) unless frob.nil?
-      ::Flickr.new({:key => @appid, :secret => @secret, :token => @token}).contacts.get_list
+      ::Flickr.new({:key => @appid, :secret => @secret, :token => @token.token}).contacts.get_list
     end
 
-    private
-      def get_token(frob)
-        client= ::Flickr.new({:key => @appid, :secret => @secret})
-        client.auth.frob= frob
-        client.auth.token.token
-      end
+    # returns a Flickr::Token
+    def get_token(frob)
+      client= ::Flickr.new({:key => @appid, :secret => @secret})
+      client.auth.frob= frob
+      client.auth.token
+    end
+
   end
 end
