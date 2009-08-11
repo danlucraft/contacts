@@ -1,12 +1,19 @@
 require 'contacts'
 
-require 'flickr_fu'
+begin
+  require 'flickr_fu'
+rescue LoadError => error
+  $LOAD_PATH<< File.dirname(__FILE__) + '/../../vendor/flickr_fu/lib'
+  require 'flickr_fu'
+end
 
 module Contacts
   
   class Flickr
 
     CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
+
+    attr_accessor :token
 
     def initialize(config_file=CONFIG_FILE)
       confs = YAML.load_file(config_file)['flickr']
@@ -18,8 +25,16 @@ module Contacts
       ::Flickr.new({:key => @appid, :secret => @secret}).auth.url
     end
 
-    def contacts(token)
-      ::Flickr.new({:key => @appid, :secret => @secret, :token => token}).contacts
+    def contacts(frob= nil)
+      @token ||= get_token(frob) unless frob.nil?
+      ::Flickr.new({:key => @appid, :secret => @secret, :token => @token}).contacts.get_list
     end
-  end 
+
+    private
+      def get_token(frob)
+        client= ::Flickr.new({:key => @appid, :secret => @secret})
+        client.auth.frob= frob
+        client.auth.token.token
+      end
+  end
 end
