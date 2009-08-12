@@ -1,6 +1,9 @@
-== Install
+== Note
 
-	gem install contacts --source http://gems.github.com
+ This is a fork of aeden/contacts[http://github.com/aeden/contacts/tree] to add:
+- appdata parameter to Contacts::Yahoo.get_authentication_url
+- context parameter to Contacts::WindowsLive.get_authentication_url
+- Contacts::Flickr to use FlickrFu
 
 == Basic usage instructions
 
@@ -22,30 +25,5 @@ Use that token in the next step:
         ['William Paginate', 'will.paginate@gmail.com'], ...
         ]
 
-Read more in Contacts::Google. I plan to support more APIs (Microsoft Live, for
-starters); feel free to contribute.
-
 Author: <b>Mislav Marohnić</b> (mislav.marohnic@gmail.com)
 
-== Documentation auto-generated from specifications
-
-Contacts::Google.authentication_url
-- generates a URL for target with default parameters
-- should handle boolean parameters
-- skips parameters that have nil value
-- should be able to exchange one-time for session token
-
-Contacts::Google
-- fetches contacts feed via HTTP GET
-- handles a normal response body
-- handles gzipped response
-- raises a FetchingError when something goes awry
-- parses the resulting feed into name/email pairs
-- parses a complex feed into name/email pairs
-- makes modification time available after parsing
-
-Contacts::Google GET query parameter handling
-- abstracts ugly parameters behind nicer ones
-- should have implicit :descending with :order
-- should have default :limit of 200
-- should skip nil values in parameters
