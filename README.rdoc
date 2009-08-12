@@ -1,6 +1,6 @@
 == Note
 
- This is a fork of aeden/contacts[http://github.com/aeden/contacts/tree] to add:
+This is a fork of aeden/contacts[http://github.com/aeden/contacts/tree] to add:
 - appdata parameter to Contacts::Yahoo.get_authentication_url
 - context parameter to Contacts::WindowsLive.get_authentication_url
 - Contacts::Flickr to use FlickrFu
