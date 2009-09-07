@@ -5,7 +5,7 @@ begin
 rescue LoadError => error
   puts "~> contacts/flickr: Could not load flickr_fu gem."
   puts "~> contacts/flickr: Install it with `gem install flickr_fu'."
-  exit
+  exit -1
 end
 
 module Contacts

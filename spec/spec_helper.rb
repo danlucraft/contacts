@@ -5,7 +5,15 @@ gem 'mocha', '~> 0.9.0'
 require 'mocha'
 
 require 'cgi'
-require 'fake_web'
+
+begin
+  require 'fake_web'
+rescue LoadError
+  puts "~> spec_helper: Could not load fakeweb gem."
+  puts "~> spec_helper: Please install it with `gem install fakeweb'."
+  exit -1
+end
+
 FakeWeb.allow_net_connect = false
 
 module SampleFeeds
