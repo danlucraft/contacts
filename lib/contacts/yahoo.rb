@@ -1,11 +1,9 @@
 require 'contacts'
 
-require 'rubygems'
 require 'hpricot'
 require 'md5'
 require 'net/https'
 require 'uri'
-require 'yaml'
 require 'json'
 
 module Contacts
@@ -91,7 +89,7 @@ module Contacts
       path<< "&appdata=#{appdata}" unless appdata.nil?
       
       signature = MD5.hexdigest(path + @secret)
-      return AUTH_DOMAIN + "#{path}&sig=#{signature}"
+      "#{AUTH_DOMAIN}#{path}&sig=#{signature}"
     end
 
     # This method return the user's contacts inside an Array in the following
@@ -207,7 +205,7 @@ module Contacts
          response = http.request(request)
       end
 
-      return response.body
+      response.body
     end
     
     # This method parses the JSON contacts document and returns an array
@@ -236,7 +234,6 @@ module Contacts
     def self.parse_contacts(json)
       contacts = []
       people = JSON.parse(json)
-
       people['contacts'].each do |contact|
         name = nil
         email = nil
@@ -281,7 +278,7 @@ module Contacts
 
         contacts.push yahoo_contact
       end
-      return contacts
+      contacts
     end
     
     #

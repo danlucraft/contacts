@@ -1,10 +1,8 @@
 require 'contacts'
-require File.join(File.dirname(__FILE__), %w{.. .. vendor windowslivelogin})
 
-require 'rubygems'
+require File.join(File.dirname(__FILE__), %w{.. .. vendor windowslivelogin})
 require 'hpricot'
 require 'uri'
-require 'yaml'
 
 module Contacts
   # = How I can fetch Windows Live Contacts?
@@ -49,7 +47,7 @@ module Contacts
   # 2. Import contacts from Windows Live and deliver it inside an Array
   #
   class WindowsLive
-    CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
+    
     attr_accessor :wll
     # Initialize a new WindowsLive object.
     #    
@@ -58,7 +56,7 @@ module Contacts
     #--
     # You can check an example of a config file inside config/ directory
     #
-    def initialize(config_file=CONFIG_FILE)
+    def initialize(config_file)
       confs = YAML.load_file(config_file)['windows_live']
       @wll = WindowsLiveLogin.new(confs['appid'], confs['secret'], confs['security_algorithm'],
                                   nil, confs['policy_url'], confs['return_url'])
@@ -129,8 +127,7 @@ module Contacts
          request = Net::HTTP::Get.new("/users/@L@#{@consent_token.locationid}/rest/LiveContacts", {"Authorization" => "DelegatedToken dt=\"#{@consent_token.delegationtoken}\""})
          response = http.request(request)
       end
-
-      return response.body
+      response.body
     end
     
     # This method parses the XML Contacts document and returns the contacts

@@ -12,11 +12,9 @@ module Contacts
   
   class Flickr
 
-    CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
-
     attr_accessor :token
 
-    def initialize(config_file=CONFIG_FILE)
+    def initialize(config_file)
       confs = YAML.load_file(config_file)['flickr']
       @appid= confs['appid']
       @secret= confs['secret']

@@ -1,5 +1,7 @@
 require 'contacts/version'
 
+require 'yaml' # required to parse yaml config file
+
 module Contacts
   
   Identifier = 'Ruby Contacts v' + VERSION::STRING
