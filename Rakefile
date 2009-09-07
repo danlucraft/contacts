@@ -61,7 +61,7 @@ begin
     s.summary = "Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs"
     s.email = "oancea@gmail.com"
     s.homepage = "http://github.com/aurelian/contacts"
-    s.description = "TODO"
+    s.description = "Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contacts APIs."
     s.authors = ["Mislav Marohnić", "Lukas Fittl", "Keavy Miller", "Aurelian Oancea"]
     s.files =  FileList["[A-Z]*", "{lib,vendor}/**/*"] 
   end

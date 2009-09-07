@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'spec'
 require 'mocha'
-
 require 'cgi'
 
 begin

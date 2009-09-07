@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'contacts/windows_live'
 
 describe Contacts::WindowsLive do

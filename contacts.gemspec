@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{contacts}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mislav Marohni\304\207", "Lukas Fittl", "Keavy Miller", "Aurelian Oancea"]
   s.date = %q{2009-09-07}
-  s.description = %q{TODO}
+  s.description = %q{Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contacts APIs.}
   s.email = %q{oancea@gmail.com}
   s.extra_rdoc_files = [
     "README.rdoc"
@@ -36,7 +36,6 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs}
   s.test_files = [
     "spec/contact_spec.rb",
-     "spec/flickr/auth_spec.rb",
      "spec/gmail/auth_spec.rb",
      "spec/gmail/fetching_spec.rb",
      "spec/spec_helper.rb",

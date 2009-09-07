@@ -1,4 +1,3 @@
-require File.join(File.dirname(__FILE__), %w{.. .. spec spec_helper})
 require 'contacts/yahoo'
 
 describe Contacts::Yahoo do
