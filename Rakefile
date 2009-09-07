@@ -5,7 +5,7 @@ task :default => :spec
 
 spec_opts = 'spec/spec.opts'
 spec_glob = FileList['spec/**/*_spec.rb']
-libs = ['lib', 'spec', 'vendor/fakeweb/lib']
+libs = ['lib', 'spec']
 
 desc 'Run all specs in spec directory'
 Spec::Rake::SpecTask.new(:spec) do |t|
@@ -62,7 +62,7 @@ begin
     s.email = "oancea@gmail.com"
     s.homepage = "http://github.com/aurelian/contacts"
     s.description = "TODO"
-    s.authors = ["Mislav Marohniƒá", "Lukas Fittl", "Keavy Miller", "Aurelian Oancea"]
+    s.authors = ["Mislav Marohnić", "Lukas Fittl", "Keavy Miller", "Aurelian Oancea"]
     s.files =  FileList["[A-Z]*", "{lib,vendor}/**/*"] 
   end
 rescue LoadError
