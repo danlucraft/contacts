@@ -59,11 +59,11 @@ begin
   Jeweler::Tasks.new do |s|
     s.name = "contacts"
     s.summary = "Ruby library for consuming Google, Yahoo!, Flickr and Windows Live contact APIs"
-    s.email = "anthonyeden@gmail.com"
-    s.homepage = "http://github.com/aeden/contacts"
+    s.email = "oancea@gmail.com"
+    s.homepage = "http://github.com/aurelian/contacts"
     s.description = "TODO"
-    s.authors = ["Mislav Marohniƒá", "Lukas Fittl", "Keavy Miller"]
-    s.files =  FileList["[A-Z]*", "{lib,spec,vendor}/**/*"] 
+    s.authors = ["Mislav Marohniƒá", "Lukas Fittl", "Keavy Miller", "Aurelian Oancea"]
+    s.files =  FileList["[A-Z]*", "{lib,vendor}/**/*"] 
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
