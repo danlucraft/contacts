@@ -3,8 +3,9 @@ require 'contacts'
 begin
   require 'flickr_fu'
 rescue LoadError => error
-  $LOAD_PATH<< File.dirname(__FILE__) + '/../../vendor/flickr_fu/lib'
-  require 'flickr_fu'
+  puts "~> contacts/flickr: Could not load flickr_fu gem."
+  puts "~> contacts/flickr: Install it with `gem install flickr_fu'."
+  exit
 end
 
 module Contacts
