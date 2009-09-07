@@ -1,7 +1,5 @@
 require 'rubygems'
-gem 'rspec', '~> 1.1.3'
 require 'spec'
-gem 'mocha', '~> 0.9.0'
 require 'mocha'
 
 require 'cgi'
@@ -13,6 +11,8 @@ rescue LoadError
   puts "~> spec_helper: Please install it with `gem install fakeweb'."
   exit -1
 end
+
+$LOAD_PATH<< File.join(File.dirname(__FILE__), '..', 'lib')
 
 FakeWeb.allow_net_connect = false
 
