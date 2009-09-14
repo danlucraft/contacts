@@ -53,11 +53,11 @@ module Contacts
   #
   class Yahoo
     AUTH_DOMAIN = "https://api.login.yahoo.com"
-    AUTH_PATH = "/WSLogin/V1/wslogin?appid=#appid&ts=#ts"
+    AUTH_PATH = "/WSLogin/V1/wslogin?appid=#appid"
+
     CREDENTIAL_PATH = "/WSLogin/V1/wspwtoken_login?appid=#appid&ts=#ts&token=#token"
     ADDRESS_BOOK_DOMAIN = "address.yahooapis.com"
     ADDRESS_BOOK_PATH = "/v1/searchContacts?format=json&fields=all&appid=#appid&WSSID=#wssid"
-    CONFIG_FILE = File.dirname(__FILE__) + '/../config/contacts.yml'
 
     attr_reader :appid, :secret, :token, :wssid, :cookie
     
@@ -68,7 +68,7 @@ module Contacts
     #--
     # You can check an example of a config file inside config/ directory
     #
-    def initialize(config_file=CONFIG_FILE)
+    def initialize(config_file)
       confs = YAML.load_file(config_file)['yahoo']
       @appid = confs['appid']
       @secret = confs['secret']
@@ -79,15 +79,12 @@ module Contacts
     # generates that URL. The user must access that URL, and after he has done
     # authentication, hi will be redirected to your application.
     #
-    def get_authentication_url(appdata= nil)
+    def get_authentication_url(appdata= nil, send_userhash=1)
       path = AUTH_PATH.clone
       path.sub!(/#appid/, @appid)
-
-      timestamp = Time.now.utc.to_i
-      path.sub!(/#ts/, timestamp.to_s)
-
       path<< "&appdata=#{appdata}" unless appdata.nil?
-      
+      path<< "&send_userhash=#{send_userhash}" unless send_userhash.nil?
+      path<< "&ts=#{Time.now.utc.to_i.to_s}"
       signature = MD5.hexdigest(path + @secret)
       "#{AUTH_DOMAIN}#{path}&sig=#{signature}"
     end
@@ -137,7 +134,7 @@ module Contacts
       if sig == MD5.hexdigest(path_without_sig + @secret)
         path.match(/token=(.+?)&/)
         @token = $1
-        return true
+        true
       else
         raise 'Signature not valid. This request may not have been sent from Yahoo.'
       end
