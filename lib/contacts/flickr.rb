@@ -25,11 +25,12 @@ module Contacts
     end
 
     def contacts(frob= nil)
-      client(frob).contacts.get_list
+      @token ||= get_token(frob) unless frob.nil?
+      client.contacts.get_list
     end
 
-    def client(frob= nil)
-      @token  ||= get_token(frob) unless frob.nil?
+    # authenticated Flickr client. expects a Flickr::Token
+    def client
       @client ||= ::Flickr.new({:key => @appid, :secret => @secret, :token => @token.token})
     end
 
