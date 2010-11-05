@@ -1,4 +1,6 @@
 require 'contacts/version'
+require 'contacts/windows_live'
+require 'contacts/google'
 
 require 'yaml' # required to parse yaml config file
 
